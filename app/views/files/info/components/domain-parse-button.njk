@@ -1,0 +1,34 @@
+<script type="text/x-template" id="domain-parse-button-template">
+    {% raw %}
+    <button class="btn btn-primary" @click="parse()">
+        Get from {{ title }}
+    </button>
+    {% endraw %}
+</script>
+
+<script type="text/javascript">
+    Vue.component("domain-parse-button", {
+        props: ["title", "idFile", "url", "type"],
+        template : "#domain-parse-button-template",
+        methods: {
+            parse: function() {
+                var self = this;
+
+                axios.post('/domain/parse', {
+                    url     : self.url,
+                    type    : self.type,
+                    id_file : self.idFile
+                })
+                .then(function (response) {
+                    console.log("done");
+                    if (response.data.status == "ok") {
+                        window.location.reload();
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        }
+    });
+</script>
